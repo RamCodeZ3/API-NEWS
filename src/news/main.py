@@ -1,11 +1,19 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import time
 
 URL = "https://www.diariolibre.com/ultima-hora"
 
+# Configuración de Chrome en modo headless
+options = Options()
+options.add_argument("--headless")         # Ejecuta sin abrir ventana
+options.add_argument("--disable-gpu")      # Recomendado en Windows
+options.add_argument("--no-sandbox")       # Útil en Linux
+options.add_argument("--disable-dev-shm-usage")
+
 # Abrir navegador (Chrome)
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(options=options)
 driver.get(URL)
 
 # Esperar a que cargue el JS
@@ -19,15 +27,17 @@ articles = soup.select("article")
 
 for art in articles:
     title = art.select_one("h2 a")
+    resumen = art.select_one("p.hidden.sm\\:block")
+    img = art.select_one("img")
     
     if title:
         print("Título:", title.get_text(strip=True))
-        print("Link:", title["href"])
-    
-    resumen = art.select_one("p.hidden.sm\\:block")
+        print("Link:", "https://www.diariolibre.com" + title["href"])
     
     if resumen:
         print("Resumen:", resumen.get_text(strip=True))
+        print(img["src"])
     print("--------------------------------------------------")
+    break
 
 driver.quit()
