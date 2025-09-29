@@ -1,11 +1,12 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
+from utils.nlp_pipeline import summarizer_article
 import time
 
 class PageFreeDiary:
     def __init__(self):
-        self.body_text = ""
+        self.summary = ""
 
     def page_free_diary(self, url):
         options = Options()
@@ -25,8 +26,8 @@ class PageFreeDiary:
         paragraphs = article.find_all("p")
 
         for p in paragraphs:
-            self.body_text += p.get_text(strip=True)
+            self.summary += summarizer_article(p.get_text(strip=True))
         
         driver.quit()
-        return self.body_text
+        return self.summary
 

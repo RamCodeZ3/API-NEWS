@@ -32,12 +32,13 @@ class FreeDiary:
             img = art.select_one("img")
 
             self.news.append({
-                'Title': title.get_text(strip=True) if title else None,
-                'Link': "https://www.diariolibre.com" + title["href"] if title else None,
-                'Resumen': scrapper.page_free_diary(
+                "source_information": "Diario Libre",
+                'title': title.get_text(strip=True) if title else None,
+                'link': "https://www.diariolibre.com" + title["href"] if title else None,
+                'summary': scrapper.page_free_diary(
                     "https://www.diariolibre.com" + title["href"]
                     ),
-                'Image': img["src"] if img else None
+                'url_link': img["src"] if img else None
             })
             break
 
