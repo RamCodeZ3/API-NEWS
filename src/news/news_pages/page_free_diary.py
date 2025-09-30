@@ -18,16 +18,15 @@ class PageFreeDiary:
         driver = webdriver.Chrome(options=options)
         driver.get(url)
 
-        time.sleep(5)
-
         soup = BeautifulSoup(driver.page_source, "html.parser")
 
         article = soup.find("div", class_="detail-body")
         paragraphs = article.find_all("p")
 
-        for p in paragraphs:
-            self.summary += summarizer_article(p.get_text(strip=True))
+        self.summary = " ".join(p.get_text(
+            " ",
+            strip=True) for p in paragraphs)
         
         driver.quit()
-        return self.summary
+        return summarizer_article(self.summary)
 

@@ -21,8 +21,6 @@ class FreeDiary:
         driver = webdriver.Chrome(options=options)
         driver.get(URL)
 
-        time.sleep(5)
-
         soup = BeautifulSoup(driver.page_source, "html.parser")
 
         articles = soup.select("article")
@@ -40,7 +38,6 @@ class FreeDiary:
                     ),
                 'url_link': img["src"] if img else None
             })
-            break
 
         driver.quit()
         return self.news

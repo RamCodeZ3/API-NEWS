@@ -2,9 +2,9 @@ from fastapi import FastAPI
 from supabase_client import supabase
 from datetime import datetime
 from news.free_diary import FreeDiary
-scrapper = FreeDiary
+scrapper = FreeDiary()
 
-data_new = scrapper.news_free_diary
+data_new = scrapper.news_free_diary()
 
 app = FastAPI()
 
@@ -19,7 +19,7 @@ def add_news_from_scraper(data_new: list[dict]):
             "summary": news_item.get("summary"),
             "url_information": news_item.get("link"),
             "url_image": news_item.get("url_link"),
-            "created_at": datetime.utcnow()
+            "created_at": datetime.utcnow().isoformat()
         }
 
         # Insertar en Supabase
@@ -28,3 +28,5 @@ def add_news_from_scraper(data_new: list[dict]):
             created_news.append(response.data[0])
 
     return {"message": "Noticias agregadas", "created_news": created_news}
+
+add_news_from_scraper(data_new) 
