@@ -21,6 +21,9 @@ class PageFreeDiary:
         soup = BeautifulSoup(driver.page_source, "html.parser")
 
         article = soup.find("div", class_="detail-body")
+        if article is None:
+            print("No se encontró el artículo en:", url)
+            return "Artículo no disponible"
         paragraphs = article.find_all("p")
 
         self.summary = " ".join(p.get_text(
