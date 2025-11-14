@@ -1,11 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from news.news_pages.page_free_diary import PageFreeDiary
+import page_free_diary as pfd
 from bs4 import BeautifulSoup
-import time
 
 URL = "https://www.diariolibre.com/ultima-hora"
-scrapper = PageFreeDiary()
+scrapper = pfd.PageFreeDiary()
 
 class FreeDiary:
     def __init__(self):
@@ -33,8 +32,8 @@ class FreeDiary:
             if title and title.has_attr("href"):
                 link = "https://www.diariolibre.com" + title["href"]
             else:
-                print("⚠️ No se encontró enlace en noticia")
-                link = "https://www.diariolibre.com"  # fallback
+                print("No se encontró enlace en noticia")
+                link = "https://www.diariolibre.com"
 
             self.news.append({
                 "source_information": "Diario Libre",
@@ -45,7 +44,7 @@ class FreeDiary:
                     ),
                 'url_link': img["src"] if img else None
             })
-            if count  == 1:
+            if count == 1:
                 break
             count += 1
 

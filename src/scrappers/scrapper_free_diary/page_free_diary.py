@@ -2,7 +2,6 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 from utils.nlp_pipeline import summarizer_article
-import time
 
 class PageFreeDiary:
     def __init__(self):
@@ -24,6 +23,7 @@ class PageFreeDiary:
         if article is None:
             print("No se encontró el artículo en:", url)
             return "Artículo no disponible"
+        
         paragraphs = article.find_all("p")
 
         self.summary = " ".join(p.get_text(
@@ -32,4 +32,3 @@ class PageFreeDiary:
         
         driver.quit()
         return summarizer_article(self.summary)
-

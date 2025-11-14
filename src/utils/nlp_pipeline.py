@@ -1,5 +1,4 @@
 from transformers import pipeline
-
 from transformers import pipeline
 
 summarizer = pipeline(
