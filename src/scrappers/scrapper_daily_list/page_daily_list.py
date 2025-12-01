@@ -1,14 +1,14 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from bs4 import BeautifulSoup
 from selenium.webdriver.chrome.service import Service
+from bs4 import BeautifulSoup
 
 
-class PageFreeDiary:
+class PageDailyList:
     def __init__(self):
         self.summary = ""
 
-    def page_free_diary(self, url):
+    def page_daily_list(self, url):
         options = Options()
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
@@ -19,10 +19,10 @@ class PageFreeDiary:
         service = Service(log_path='NUL')
         driver = webdriver.Chrome(options=options, service=service)
         driver.get(url)
-
+        
         soup = BeautifulSoup(driver.page_source, "html.parser")
 
-        article = soup.find("div", class_="detail-body")
+        article = soup.find("div", class_="c-article__free c-detail__body")
         if article is None:
             print("No se encontró el artículo en:", url)
             return "Artículo no disponible"
