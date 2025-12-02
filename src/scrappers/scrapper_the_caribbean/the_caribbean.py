@@ -2,19 +2,19 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
-from scrappers.scrapper_daily_list.page_daily_list import PageDailyList
+from scrappers.scrapper_the_caribbean.page_the_caribbean import PageTheCaribbean
 
 
-URL = "https://listindiario.com/search/?query=ultima+hora"
-scrapper = PageDailyList()
+URL = "https://www.elcaribe.com.do/autor/elcaribe/"
+scrapper = PageTheCaribbean()
 
-class DailyList:
+class TheCaribbean:
     def __init__(self):
         self.news = []
     
-    def news_daily_list(self, count: int):
+    def news_the_carribean(self, count: int):
         options = Options()
-        options.add_argument("--headless")
+        options.add_argument("--headless=new")
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
@@ -25,27 +25,30 @@ class DailyList:
         driver.get(URL)
 
         soup = BeautifulSoup(driver.page_source, 'html.parser')
-        articles = soup.select("article")
+        articles = soup.select('article')
         count2 = 1
 
         for art in articles:
-            title = art.select_one("h3 a")
-            figure = art.find('figure', class_='c-article__thumb')
-            img = figure.select_one("figure.c-article__thumb picture img")
-            link = 'https://listindiario.com' + title['href']
+            category = art.select_one('div.entry-content-wrap header div a')
+            title = art.select_one('div.entry-content-wrap header h3 a')
+            link = title['href']
+            img = art.select_one('a div div img')
 
             self.news.append({
-                "source_information": "Listin Diario",
+                "source_information": "El Caribe",
+                "category": category.get_text(strip=True),
                 'title': title.get_text(strip=True) if title else None,
                 'link': link,
-                'summary': scrapper.page_daily_list(
-                    "https://listindiario.com" + title["href"]
+                'summary': scrapper.page_the_caribbean(
+                    title["href"]
                     ),
                 'url_img': img["src"] if img else None
             })
+            
             if count2 == count:
                 break
             count2 += 1
         
         driver.quit()
-        return self.news
+
+

@@ -2,9 +2,11 @@ from fastapi import FastAPI
 from datetime import datetime
 from scrappers.scrapper_free_diary.free_diary import FreeDiary
 from scrappers.scrapper_daily_list.daily_list import DailyList
+from scrappers.scrapper_the_caribbean.the_caribbean import TheCaribbean
 
 scrapper_FreDiary = FreeDiary()
 scrapper_DailyList = DailyList()
+scrapper_TheCaribbean = TheCaribbean()
 app = FastAPI()
 
 @app.get("/news/scrapper/{source}/{count}")
@@ -17,12 +19,16 @@ async def get_news_from_scrapper(source: str, count: int):
     elif source == 'DailyList':
         data_new = scrapper_DailyList.news_daily_list(count)
     
+    elif source == 'TheCaribbean':
+        data_new = scrapper_TheCaribbean.news_the_carribean(count)
+    
     print('🎬 Se obtuvo los datos exitosamente ✅')
     created_news = []
 
     for news_item in data_new:
         news_data = {
             "source_information": news_item.get("source_information"),
+            "category": news_item.get("category"),
             "title": news_item.get("title"),
             "summary": news_item.get("summary"),
             "url_information": news_item.get("link"),
