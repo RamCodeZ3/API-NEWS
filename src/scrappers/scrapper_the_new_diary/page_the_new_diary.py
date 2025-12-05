@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 class PageTheNewDiary:
     def __init__(self):
         self.summary = ""
@@ -12,7 +13,7 @@ class PageTheNewDiary:
 
         container = soup.select_one("div.entry-content.mt-md-4.mt-3")
         if not container:
-            return []
+            return None
 
         paragraphs = container.find_all("p") if container else []
 

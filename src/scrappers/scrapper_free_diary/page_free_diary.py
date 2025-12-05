@@ -1,7 +1,5 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
-from selenium.webdriver.chrome.service import Service
+import requests
 
 
 class PageFreeDiary:
@@ -9,20 +7,8 @@ class PageFreeDiary:
         self.summary = ""
 
     def page_free_diary(self, url):
-        options = Options()
-        options.add_argument("--headless")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--log-level=3")
-        options.add_argument("--silent")
-        service = Service(log_path='NUL')
-        driver = webdriver.Chrome(options=options, service=service)
-        driver.set_page_load_timeout(60)
-        driver.implicitly_wait(10)
-        driver.get(url)
-
-        soup = BeautifulSoup(driver.page_source, "html.parser")
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, "html.parser")
 
         article = soup.find("div", class_="detail-body")
         if article is None:
@@ -35,5 +21,4 @@ class PageFreeDiary:
             " ",
             strip=True) for p in paragraphs)
         
-        driver.quit()
         return self.summary
