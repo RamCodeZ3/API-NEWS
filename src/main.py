@@ -13,13 +13,13 @@ app = FastAPI()
 async def get_news_from_scrapper(source: str, count: int):
     print('🎬 Se comenzo con el webscraping ✅')
     
-    if source == 'FreeDiary':
+    if source == 'diarioLibre':
         data_new = scrapper_FreDiary.news_free_diary(count)
     
-    elif source == 'DailyList':
+    elif source == 'listinDiario':
         data_new = scrapper_DailyList.news_daily_list(count)
     
-    elif source == 'TheCaribbean':
+    elif source == 'elCariber':
         data_new = scrapper_TheCaribbean.news_the_carribean(count)
     
     print('🎬 Se obtuvo los datos exitosamente ✅')
@@ -32,7 +32,6 @@ async def get_news_from_scrapper(source: str, count: int):
             "title": news_item.get("title"),
             "summary": news_item.get("summary"),
             "url_information": news_item.get("link"),
-            "url_image": news_item.get("url_link"),
             "scrapper_at": datetime.utcnow().isoformat()
         }
         

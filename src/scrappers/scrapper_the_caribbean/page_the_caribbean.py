@@ -38,5 +38,3 @@ class PageTheCaribbean:
         print(self.summary)
         return self.summary
 
-p = PageTheCaribbean()
-p.page_the_caribbean('https://www.elcaribe.com.do/panorama/dinero/revista-global-finance-otorga-dos-nuevos-premios-a-banreservas/')

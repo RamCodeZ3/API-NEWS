@@ -22,6 +22,8 @@ class TheCaribbean:
         options.add_argument("--silent")
         service = Service(log_path='NUL')
         driver = webdriver.Chrome(options=options, service=service)
+        driver.set_page_load_timeout(60)
+        driver.implicitly_wait(10)
         driver.get(URL)
 
         soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -32,17 +34,13 @@ class TheCaribbean:
             category = art.select_one('div.entry-content-wrap header div a')
             title = art.select_one('div.entry-content-wrap header h3 a')
             link = title['href']
-            img = art.select_one('a div div img')
 
             self.news.append({
                 "source_information": "El Caribe",
                 "category": category.get_text(strip=True),
                 'title': title.get_text(strip=True) if title else None,
                 'link': link,
-                'summary': scrapper.page_the_caribbean(
-                    title["href"]
-                    ),
-                'url_img': img["src"] if img else None
+                'summary': scrapper.page_the_caribbean(title["href"]),
             })
             
             if count2 == count:
@@ -50,5 +48,3 @@ class TheCaribbean:
             count2 += 1
         
         driver.quit()
-
-

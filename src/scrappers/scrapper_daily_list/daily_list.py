@@ -22,6 +22,8 @@ class DailyList:
         options.add_argument("--silent")
         service = Service(log_path='NUL')
         driver = webdriver.Chrome(options=options, service=service)
+        driver.set_page_load_timeout(60)
+        driver.implicitly_wait(10)
         driver.get(URL)
 
         soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -30,18 +32,16 @@ class DailyList:
 
         for art in articles:
             title = art.select_one("h3 a")
-            figure = art.find('figure', class_='c-article__thumb')
-            img = figure.select_one("figure.c-article__thumb picture img")
             link = 'https://listindiario.com' + title['href']
 
             self.news.append({
                 "source_information": "Listin Diario",
+                "category": None,
                 'title': title.get_text(strip=True) if title else None,
                 'link': link,
                 'summary': scrapper.page_daily_list(
                     "https://listindiario.com" + title["href"]
                     ),
-                'url_img': img["src"] if img else None
             })
             if count2 == count:
                 break
