@@ -2,17 +2,17 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
-from scrappers.scrapper_daily_list.page_daily_list import PageDailyList
+from scrappers.scrapper_the_new_diary.page_the_new_diary import PageTheNewDiary
 
 
-URL = "https://listindiario.com/"
-scrapper = PageDailyList()
+URL = "https://elnuevodiario.com.do/novedades/"
+scrapper = PageTheNewDiary()
 
-class DailyList:
+class TheNewDiary:
     def __init__(self):
         self.news = []
     
-    def news_daily_list(self, count: int):
+    def news_the_new_diary(self, count: int):
         options = Options()
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
@@ -31,18 +31,15 @@ class DailyList:
         count2 = 1
 
         for art in articles:
-            title = art.select_one("h2 a")
-            category = art.select("div.c-article__txt p.c-article__epigraph ")
-            link = 'https://listindiario.com' + title['href']
+            title = art.select_one("div div header a")
+            category = None
 
             self.news.append({
-                "source_information": "Listin Diario",
+                "source_information": "El Nuevo Diario",
                 "category": category,
                 'title': title.get_text(strip=True) if title else None,
-                'link': link,
-                'summary': scrapper.page_daily_list(
-                    "https://listindiario.com" + title["href"]
-                    ),
+                'link': title["href"],
+                'summary': scrapper.page_the_new_diary(title["href"])
             })
             if count2 == count:
                 break

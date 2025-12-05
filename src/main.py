@@ -3,15 +3,19 @@ from datetime import datetime
 from scrappers.scrapper_free_diary.free_diary import FreeDiary
 from scrappers.scrapper_daily_list.daily_list import DailyList
 from scrappers.scrapper_the_caribbean.the_caribbean import TheCaribbean
+from scrappers.scrapper_accent.accent import Accent
+from scrappers.scrapper_the_new_diary.the_new_diary import TheNewDiary
 
 scrapper_FreDiary = FreeDiary()
 scrapper_DailyList = DailyList()
 scrapper_TheCaribbean = TheCaribbean()
+scrapper_accent = Accent()
+scrapper_the_new_diary = TheNewDiary()
 app = FastAPI()
 
 @app.get("/news/scrapper/{source}/{count}")
 async def get_news_from_scrapper(source: str, count: int):
-    print('🎬 Se comenzo con el webscraping ✅')
+    print(f'🎬 Se comenzo con el webscraping de {source} ✅')
     
     if source == 'diarioLibre':
         data_new = scrapper_FreDiary.news_free_diary(count)
@@ -21,6 +25,15 @@ async def get_news_from_scrapper(source: str, count: int):
     
     elif source == 'elCariber':
         data_new = scrapper_TheCaribbean.news_the_carribean(count)
+    
+    elif source == 'acento':
+        data_new = scrapper_accent.news_accent(count)
+    
+    elif source == 'elNuevoDiario':
+        data_new = scrapper_the_new_diary.news_the_new_diary(count)
+    
+    else:
+        return{"message": f'La API no contiene informacion de esta "{source}" fuente'}
     
     print('🎬 Se obtuvo los datos exitosamente ✅')
     created_news = []
@@ -38,4 +51,4 @@ async def get_news_from_scrapper(source: str, count: int):
         created_news.append(news_data)
 
     print('🎬 Webscraping finalizado con exito ✅')
-    return {"message": "Noticias agregadas", "created_news": created_news}
+    return {"message": "Noticias conseguida con exito", "created_news": created_news}

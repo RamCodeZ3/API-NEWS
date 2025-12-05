@@ -2,17 +2,17 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
-from scrappers.scrapper_daily_list.page_daily_list import PageDailyList
+from scrappers.scrapper_accent.page_accent import PageAccent
 
 
-URL = "https://listindiario.com/"
-scrapper = PageDailyList()
+URL = "https://acento.com.do/seccion/actualidad.html"
+scrapper = PageAccent()
 
-class DailyList:
+class Accent:
     def __init__(self):
         self.news = []
     
-    def news_daily_list(self, count: int):
+    def news_accent(self, count: int):
         options = Options()
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
@@ -27,22 +27,19 @@ class DailyList:
         driver.get(URL)
 
         soup = BeautifulSoup(driver.page_source, 'html.parser')
-        articles = soup.select("article")
+        articles = soup.select("article.entry-box.entry-box--standard")
         count2 = 1
 
         for art in articles:
-            title = art.select_one("h2 a")
-            category = art.select("div.c-article__txt p.c-article__epigraph ")
-            link = 'https://listindiario.com' + title['href']
+            title = art.select_one("a.cover-link")
+            category = art.select_one("div.entry-data-upper-container p")
 
             self.news.append({
-                "source_information": "Listin Diario",
-                "category": category,
-                'title': title.get_text(strip=True) if title else None,
-                'link': link,
-                'summary': scrapper.page_daily_list(
-                    "https://listindiario.com" + title["href"]
-                    ),
+                "source_information": "acento",
+                "category": category.get_text(strip=True),
+                'title': title["title"] if title else None,
+                'link': title["href"],
+                'summary': scrapper.page_accent(title["href"])
             })
             if count2 == count:
                 break

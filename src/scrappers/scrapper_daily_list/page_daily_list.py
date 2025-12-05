@@ -18,6 +18,8 @@ class PageDailyList:
         options.add_argument("--silent")
         service = Service(log_path='NUL')
         driver = webdriver.Chrome(options=options, service=service)
+        driver.set_page_load_timeout(60)
+        driver.implicitly_wait(10)
         driver.get(url)
         
         soup = BeautifulSoup(driver.page_source, "html.parser")
