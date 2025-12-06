@@ -29,12 +29,12 @@ class FreeDiary():
         options.add_argument("--disable-software-rasterizer")
         options.add_argument("--disable-webgl")
         options.add_argument("--disable-webgl2")
-        
         service = Service(log_path='NUL')
-        driver = webdriver.Chrome(options=options, service=service)
-        driver.get(URL)
-
+        
         try:
+            driver = webdriver.Chrome(options=options, service=service)
+            driver.get(URL)
+
             soup = BeautifulSoup(driver.page_source, "html.parser")
             articles = soup.select("article")
             count2 = 1
@@ -66,6 +66,6 @@ class FreeDiary():
             driver.quit()
             print("✅ Se realizo el webscraping del Diario Libre con exito")
             return self.news
-        
+
         except:
            print("❌ No se pudo completar el webscraping de Diario Libre.")

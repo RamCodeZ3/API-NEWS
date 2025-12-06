@@ -29,14 +29,14 @@ class Accent:
         options.add_argument("--disable-software-rasterizer")
         options.add_argument("--disable-webgl")
         options.add_argument("--disable-webgl2")
-
         service = Service(log_path='NUL')
-        driver = webdriver.Chrome(options=options, service=service)
-        driver.set_page_load_timeout(60)
-        driver.implicitly_wait(10)
-        driver.get(URL)
-
+        
         try:
+            driver = webdriver.Chrome(options=options, service=service)
+            driver.set_page_load_timeout(60)
+            driver.implicitly_wait(10)
+            driver.get(URL)
+
             soup = BeautifulSoup(driver.page_source, 'html.parser')
             articles = soup.select("article.entry-box.entry-box--standard")
             count2 = 1
